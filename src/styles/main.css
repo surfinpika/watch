@@ -1,0 +1,560 @@
+/* New Port City - City Watch */
+/* Medieval Fantasy with Tropical Coastal Aesthetic */
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap');
+
+:root {
+    /* Dark medieval palette with ocean accents */
+    --color-bg-dark: #0a0a0f;
+    --color-bg-medium: #1a1a24;
+    --color-bg-light: #2a2a3a;
+
+    /* Ocean and tropical colors */
+    --color-ocean-deep: #0d3b4c;
+    --color-ocean-mid: #1a5f7a;
+    --color-ocean-light: #2d8fb3;
+    --color-sand: #d4a574;
+    --color-palm: #2d5a3d;
+    --color-coral: #e07a5f;
+
+    /* UI accents */
+    --color-gold: #c9a227;
+    --color-gold-light: #e8c547;
+    --color-silver: #a8b2c1;
+    --color-parchment: #f4e4bc;
+
+    /* Text colors */
+    --color-text: #e0ddd4;
+    --color-text-dim: #8a8580;
+
+    /* Title colors for occupations */
+    --color-title-royal: #9b59b6;
+    --color-title-noble: #3498db;
+    --color-title-knight: #e67e22;
+    --color-title-guard: #27ae60;
+    --color-title-common: #95a5a6;
+
+    /* Rank badge colors (seashell themed) */
+    --rank-recruit: #d4a574;
+    --rank-watchman: #a8b2c1;
+    --rank-sergeant: #c9a227;
+    --rank-lieutenant: #2d8fb3;
+    --rank-captain: #e07a5f;
+    --rank-commander: #9b59b6;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--color-bg-dark);
+    font-family: 'Crimson Text', Georgia, serif;
+    color: var(--color-text);
+    overflow: hidden;
+    user-select: none;
+}
+
+#game-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#game-canvas {
+    background-color: var(--color-bg-medium);
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+}
+
+#ui-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+#ui-layer > * {
+    pointer-events: auto;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Main Menu */
+#main-menu {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        180deg,
+        var(--color-bg-dark) 0%,
+        var(--color-ocean-deep) 50%,
+        var(--color-bg-dark) 100%
+    );
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+}
+
+#menu-title {
+    text-align: center;
+}
+
+#menu-title h1 {
+    font-family: 'Cinzel', serif;
+    font-size: 4rem;
+    font-weight: 900;
+    color: var(--color-gold);
+    text-shadow:
+        0 0 10px rgba(201, 162, 39, 0.5),
+        2px 2px 0 var(--color-bg-dark);
+    letter-spacing: 0.3em;
+    margin-bottom: 0.5rem;
+}
+
+#menu-title h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.8rem;
+    font-weight: 400;
+    color: var(--color-silver);
+    letter-spacing: 0.5em;
+}
+
+#menu-subtitle {
+    font-style: italic;
+    color: var(--color-text-dim);
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+#menu-options {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+#menu-options button {
+    font-family: 'Cinzel', serif;
+    font-size: 1.4rem;
+    padding: 1rem 3rem;
+    background: linear-gradient(180deg, var(--color-bg-light) 0%, var(--color-bg-medium) 100%);
+    border: 2px solid var(--color-gold);
+    color: var(--color-parchment);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    letter-spacing: 0.1em;
+}
+
+#menu-options button:hover:not(:disabled) {
+    background: linear-gradient(180deg, var(--color-gold) 0%, var(--color-sand) 100%);
+    color: var(--color-bg-dark);
+    transform: scale(1.05);
+}
+
+#menu-options button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    border-color: var(--color-text-dim);
+}
+
+/* Dialogue Box */
+#dialogue-box {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 900px;
+    background: linear-gradient(
+        180deg,
+        rgba(26, 26, 36, 0.95) 0%,
+        rgba(10, 10, 15, 0.98) 100%
+    );
+    border: 3px solid var(--color-gold);
+    border-radius: 4px;
+    padding: 1.5rem;
+    display: flex;
+    gap: 1.5rem;
+    box-shadow:
+        0 0 20px rgba(0, 0, 0, 0.8),
+        inset 0 0 30px rgba(201, 162, 39, 0.1);
+}
+
+#dialogue-portrait {
+    width: 150px;
+    height: 150px;
+    background-color: var(--color-bg-light);
+    border: 2px solid var(--color-silver);
+    flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 4rem;
+}
+
+#dialogue-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+#dialogue-speaker {
+    font-family: 'Cinzel', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--color-gold);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+#dialogue-text {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    color: var(--color-parchment);
+}
+
+#dialogue-continue {
+    position: absolute;
+    bottom: 0.5rem;
+    right: 1rem;
+    color: var(--color-gold);
+    animation: bounce 1s infinite;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(5px); }
+}
+
+/* Title/Occupation styling in dialogue */
+.title-royal { color: var(--color-title-royal); font-weight: 600; }
+.title-noble { color: var(--color-title-noble); font-weight: 600; }
+.title-knight { color: var(--color-title-knight); font-weight: 600; }
+.title-guard { color: var(--color-title-guard); font-weight: 600; }
+.title-common { color: var(--color-title-common); font-weight: 600; }
+
+/* Quest Reveal (Yakuza-style) */
+#quest-reveal {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+#quest-reveal-content {
+    text-align: center;
+    animation: questSlideIn 0.8s ease;
+}
+
+@keyframes questSlideIn {
+    from {
+        transform: translateX(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+#quest-chapter {
+    font-family: 'Cinzel', serif;
+    font-size: 1.2rem;
+    color: var(--color-silver);
+    letter-spacing: 0.3em;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+}
+
+#quest-title {
+    font-family: 'Cinzel', serif;
+    font-size: 3rem;
+    font-weight: 900;
+    color: var(--color-gold);
+    text-shadow:
+        0 0 20px rgba(201, 162, 39, 0.6),
+        0 4px 0 var(--color-bg-dark);
+    letter-spacing: 0.1em;
+}
+
+/* Rank Badge */
+#rank-badge {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: rgba(10, 10, 15, 0.9);
+    padding: 0.5rem 1rem;
+    border: 2px solid var(--color-gold);
+    border-radius: 4px;
+}
+
+#badge-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.8rem;
+}
+
+#badge-rank {
+    font-family: 'Cinzel', serif;
+    font-size: 0.9rem;
+    color: var(--color-parchment);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+/* Game HUD */
+#game-hud {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+#location-name {
+    font-family: 'Cinzel', serif;
+    font-size: 1.2rem;
+    color: var(--color-parchment);
+    background: rgba(10, 10, 15, 0.8);
+    padding: 0.5rem 1.5rem;
+    border-left: 3px solid var(--color-gold);
+    margin-left: 200px;
+}
+
+#hud-controls {
+    display: flex;
+    gap: 0.5rem;
+}
+
+#hud-controls button {
+    font-family: 'Cinzel', serif;
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+    background: rgba(26, 26, 36, 0.9);
+    border: 1px solid var(--color-silver);
+    color: var(--color-text);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+#hud-controls button:hover {
+    border-color: var(--color-gold);
+    color: var(--color-gold);
+}
+
+/* Investigation UI */
+#investigation-ui {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+#evidence-panel {
+    background: rgba(10, 10, 15, 0.95);
+    border: 2px solid var(--color-ocean-mid);
+    padding: 1rem;
+    min-width: 200px;
+}
+
+#evidence-panel h3 {
+    font-family: 'Cinzel', serif;
+    color: var(--color-ocean-light);
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--color-ocean-mid);
+}
+
+#evidence-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.evidence-item {
+    padding: 0.5rem;
+    background: var(--color-bg-light);
+    border-left: 3px solid var(--color-coral);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.evidence-item:hover {
+    background: var(--color-bg-medium);
+    border-left-color: var(--color-gold);
+}
+
+/* Quest Log */
+#quest-log {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 700px;
+    max-height: 80vh;
+    background: rgba(10, 10, 15, 0.98);
+    border: 3px solid var(--color-gold);
+    border-radius: 4px;
+}
+
+#quest-log-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--color-gold);
+}
+
+#quest-log-header h2 {
+    font-family: 'Cinzel', serif;
+    color: var(--color-gold);
+}
+
+#btn-close-quests {
+    font-size: 1.5rem;
+    background: none;
+    border: none;
+    color: var(--color-text);
+    cursor: pointer;
+}
+
+#btn-close-quests:hover {
+    color: var(--color-coral);
+}
+
+#quest-log-content {
+    padding: 1rem 1.5rem;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.quest-entry {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    background: var(--color-bg-light);
+    border-left: 4px solid var(--color-gold);
+}
+
+.quest-entry.completed {
+    border-left-color: var(--color-palm);
+    opacity: 0.7;
+}
+
+.quest-entry-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.1rem;
+    color: var(--color-parchment);
+    margin-bottom: 0.5rem;
+}
+
+.quest-entry-desc {
+    color: var(--color-text-dim);
+    font-size: 0.95rem;
+}
+
+/* Interaction Prompt */
+#interaction-prompt {
+    position: absolute;
+    bottom: 200px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(10, 10, 15, 0.9);
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--color-silver);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+#prompt-key {
+    background: var(--color-gold);
+    color: var(--color-bg-dark);
+    padding: 0.2rem 0.5rem;
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+}
+
+#prompt-text {
+    color: var(--color-parchment);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--color-bg-dark);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--color-ocean-mid);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--color-ocean-light);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    #menu-title h1 {
+        font-size: 2.5rem;
+        letter-spacing: 0.1em;
+    }
+
+    #menu-title h2 {
+        font-size: 1.2rem;
+    }
+
+    #dialogue-box {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #dialogue-portrait {
+        width: 100px;
+        height: 100px;
+    }
+}
