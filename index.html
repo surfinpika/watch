@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Port City - City Watch</title>
+    <link rel="stylesheet" href="src/styles/main.css">
+</head>
+<body>
+    <div id="game-container">
+        <canvas id="game-canvas"></canvas>
+        <div id="ui-layer">
+            <!-- Dialogue Box -->
+            <div id="dialogue-box" class="hidden">
+                <div id="dialogue-portrait"></div>
+                <div id="dialogue-content">
+                    <div id="dialogue-speaker"></div>
+                    <div id="dialogue-text"></div>
+                </div>
+                <div id="dialogue-continue">▼</div>
+            </div>
+
+            <!-- Quest Reveal Overlay (Yakuza style) -->
+            <div id="quest-reveal" class="hidden">
+                <div id="quest-reveal-content">
+                    <div id="quest-chapter"></div>
+                    <div id="quest-title"></div>
+                </div>
+            </div>
+
+            <!-- Investigation UI -->
+            <div id="investigation-ui" class="hidden">
+                <div id="evidence-panel">
+                    <h3>Evidence</h3>
+                    <div id="evidence-list"></div>
+                </div>
+            </div>
+
+            <!-- Rank Badge Display -->
+            <div id="rank-badge">
+                <div id="badge-icon"></div>
+                <div id="badge-rank"></div>
+            </div>
+
+            <!-- Main Menu -->
+            <div id="main-menu">
+                <div id="menu-title">
+                    <h1>NEW PORT CITY</h1>
+                    <h2>City Watch</h2>
+                </div>
+                <div id="menu-subtitle">A Tale of Justice and Tides</div>
+                <div id="menu-options">
+                    <button id="btn-new-game">New Game</button>
+                    <button id="btn-continue" disabled>Continue</button>
+                    <button id="btn-options">Options</button>
+                </div>
+            </div>
+
+            <!-- Game HUD -->
+            <div id="game-hud" class="hidden">
+                <div id="location-name"></div>
+                <div id="hud-controls">
+                    <button id="btn-menu">Menu</button>
+                    <button id="btn-evidence">Evidence</button>
+                    <button id="btn-quests">Quests</button>
+                </div>
+            </div>
+
+            <!-- Quest Log -->
+            <div id="quest-log" class="hidden">
+                <div id="quest-log-header">
+                    <h2>Quest Log</h2>
+                    <button id="btn-close-quests">×</button>
+                </div>
+                <div id="quest-log-content"></div>
+            </div>
+
+            <!-- Interaction Prompt -->
+            <div id="interaction-prompt" class="hidden">
+                <span id="prompt-key">E</span>
+                <span id="prompt-text">Talk</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Scripts -->
+    <script type="module" src="src/main.js"></script>
+</body>
+</html>
